@@ -16,6 +16,7 @@
 # include "structur.h"
 
 int	x_exit(t_cube *cube);
+int	mouse_move(int x, int y, t_cube *cube);
 int	key_press(int keycode, t_cube *get);
 int	key_release(int keycode, t_cube *get);
 

@@ -49,6 +49,7 @@ void	init_move(t_move *move)
 	move->rotate_right = 0;
 	move->look_up = 0;
 	move->look_down = 0;
+	move->mouse_mode = 1;
 }
 
 void	init_cube(t_cube *data)

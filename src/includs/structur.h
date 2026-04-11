@@ -145,6 +145,7 @@ typedef struct move
 	int				rotate_right;
 	int				look_up;
 	int				look_down;
+	int				mouse_mode;
 }					t_move;
 
 typedef struct s_cube

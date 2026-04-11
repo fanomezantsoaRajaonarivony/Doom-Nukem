@@ -28,6 +28,7 @@ void	gener_cube(t_cube *cube)
 {
 	cube->window.mlx_win = mlx_new_window(cube->window.mlx_ptr, WIDTH, HEIGHT,
 			"Cat_Sans_Cat");
+	mlx_mouse_hide(cube->window.mlx_ptr, cube->window.mlx_win);
 	cube->data.img = mlx_new_image(cube->window.mlx_ptr, WIDTH, HEIGHT);
 	cube->data.addr = (int *)mlx_get_data_addr(cube->data.img,
 			&cube->data.bits_per_pixel, &cube->data.line_length,
@@ -40,6 +41,7 @@ void	gener_cube(t_cube *cube)
 	mlx_hook(cube->window.mlx_win, 33, 1L << 17, x_exit, cube);
 	mlx_hook(cube->window.mlx_win, 2, 1L << 0, key_press, cube);
 	mlx_hook(cube->window.mlx_win, 3, 1L << 1, key_release, cube);
+	mlx_hook(cube->window.mlx_win, 6, 1L<<6, mouse_move, cube);
 	mlx_loop_hook(cube->window.mlx_ptr, start_cube, cube);
 	mlx_loop(cube->window.mlx_ptr);
 }
