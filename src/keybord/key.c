@@ -76,9 +76,13 @@ int key_press(int keycode, t_cube *get)
     else if (keycode == 65363)
         get->move.rotate_right = 1;
     else if (keycode == 65362)
-        get->move.look_down = 1;  // était look_up
+        get->move.look_down = 1;
     else if (keycode == 65364)
-        get->move.look_up = 1;    // était look_down
+        get->move.look_up = 1;
+    else if (keycode == 65505 || keycode == 65506)
+        get->move.run = 1;
+    else if (keycode == 32)
+        get->move.jump = 1;
     else if (keycode == 65481)
     {
         get->move.mouse_mode ^= 1;  // F12 toggle mouse mode
@@ -107,8 +111,12 @@ int key_release(int keycode, t_cube *get)
     else if (keycode == 65363)
         get->move.rotate_right = 0;
     else if (keycode == 65362)
-        get->move.look_down = 0;  // était look_up
+        get->move.look_down = 0;
     else if (keycode == 65364)
-        get->move.look_up = 0;    // était look_down
+        get->move.look_up = 0;
+    else if (keycode == 65505 || keycode == 65506)
+        get->move.run = 0;
+    else if (keycode == 32)
+        get->move.jump = 0;
     return (1);
 }

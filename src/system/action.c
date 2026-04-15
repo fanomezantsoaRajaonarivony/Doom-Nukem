@@ -76,3 +76,72 @@ void	look_up_down(t_cube *cube)
 			cube->player.pitch = -max_pitch;
 	}
 }
+
+void	update_stamina(t_cube *cube)
+{
+	int	is_running;
+
+	is_running = cube->move.run && (cube->move.forward || cube->move.backward
+			|| cube->move.left || cube->move.right)
+		&& cube->player.stamina > 0.4 && cube->player.exhaustion_timer == 0;
+	if (is_running)
+	{
+		cube->player.stamina -= 0.4;
+		if (cube->player.stamina <= 0)
+		{
+			cube->player.stamina = 0;
+			cube->player.exhausted = 1;
+			cube->player.exhaustion_timer = 180; // 3 seconds at 60 FPS
+		}
+	}
+	else if (!is_running) // Regenerate when not running (even if exhausted)
+	{
+		cube->player.stamina += 0.05;
+		if (cube->player.stamina > 100.0)
+			cube->player.stamina = 100.0;
+	}
+	
+	// Handle exhaustion timer - only decrease timer, don't clear exhausted state yet
+	if (cube->player.exhaustion_timer > 0)
+	{
+		cube->player.exhaustion_timer--;
+		// Only clear exhausted state when timer reaches 0 AND stamina has regenerated to 30
+		if (cube->player.exhaustion_timer == 0 && cube->player.stamina >= 30.0)
+		{
+			cube->player.exhausted = 0;
+		}
+		else if (cube->player.exhaustion_timer == 0 && cube->player.stamina < 30.0)
+		{
+			// Keep exhausted state but allow stamina to regenerate to 30
+			cube->player.exhausted = 1;
+		}
+	}
+}
+
+void	update_jump(t_cube *cube)
+{
+	double	gravity;
+	double	jump_force;
+
+	gravity = 0.008;
+	jump_force = 0.18;
+
+	if (cube->move.jump && !cube->player.is_jumping && cube->player.jump_height <= 0)
+	{
+		cube->player.is_jumping = 1;
+		cube->player.jump_velocity = jump_force;
+		cube->move.jump = 0;
+	}
+
+	if (cube->player.is_jumping)
+	{
+		cube->player.jump_height += cube->player.jump_velocity;
+		cube->player.jump_velocity -= gravity;
+		if (cube->player.jump_height <= 0)
+		{
+			cube->player.jump_height = 0;
+			cube->player.jump_velocity = 0;
+			cube->player.is_jumping = 0;
+		}
+	}
+}

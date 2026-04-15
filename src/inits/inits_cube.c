@@ -21,6 +21,12 @@ void	init_player(t_player *player)
 	player->move = 0.1;
 	player->rotet = 0.01;
 	player->pitch = 0.0;
+	player->stamina = 100.0;
+	player->exhausted = 0;
+	player->exhaustion_timer = 0;
+	player->is_jumping = 0;
+	player->jump_velocity = 0.0;
+	player->jump_height = 0.0;
 }
 
 void	init_map(t_map *map)
@@ -50,6 +56,8 @@ void	init_move(t_move *move)
 	move->look_up = 0;
 	move->look_down = 0;
 	move->mouse_mode = 1;
+	move->run = 0;
+	move->jump = 0;
 }
 
 void	init_cube(t_cube *data)

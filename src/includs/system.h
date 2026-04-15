@@ -40,5 +40,8 @@ void	rotate_camera(t_move *move, t_camera *cam, t_player *player);
 void	move_x(t_cube *get, t_player *player, t_camera *cam, t_ray *ray);
 void	move_y(t_cube *get, t_player *player, t_camera *cam, t_ray *ray);
 void	look_up_down(t_cube *cube);
+void	update_stamina(t_cube *cube);
+void	display_stamina(t_cube *cube);
+void	update_jump(t_cube *cube);
 
 #endif

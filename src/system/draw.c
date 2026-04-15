@@ -57,9 +57,10 @@ void    prepare_texture_render(t_cube *get, int x)
             && ray->raydiry < 0))
         img->texx = get->texture[img->texdir].width - img->texx - 1;
 
-    // Vrai haut géométrique du mur sur l'écran (AVEC pitch, sans clamp)
+    // Vrai haut géométrique du mur sur l'écran (AVEC pitch et jump, sans clamp)
     true_wall_top = HEIGHT / 2 - ray->lineheight / 2
-        - (int)(get->player.pitch * HEIGHT / 2);
+        - (int)(get->player.pitch * HEIGHT / 2)
+        - (int)(get->player.jump_height * 5.0 * HEIGHT / 2);
 
     // Pixels sautés entre le vrai haut et drawstart (à cause du clamp)
     img->texpos = 0;
@@ -71,7 +72,7 @@ void    prepare_texture_render(t_cube *get, int x)
 
 static void	draw_cond(int draw[2], t_cube *get, int index)
 {
-	if (draw[0] <= draw[1])
+	if (draw[0] <= draw[1] && draw[0] >= 0 && draw[1] < HEIGHT)
 		prepare_texture_render(get, index);
 }
 
@@ -100,6 +101,100 @@ int	render_wall_column(t_cube *get, int index)
 	draw_cond(draw, get, index);
 	j = draw[1];
 	while (++j < HEIGHT)
-		get->data.addr[j * line_offset + index] = color_floor;
+	{
+		if (j >= 0 && j < HEIGHT && index >= 0 && index < line_offset)
+			get->data.addr[j * line_offset + index] = color_floor;
+	}
 	return (0);
+}
+
+void	display_stamina(t_cube *cube)
+{
+	int		x;
+	int		y;
+	int		bar_width;
+	int		bar_height;
+	int		stamina_percent;
+	int		i;
+
+	stamina_percent = (int)(cube->player.stamina);
+	bar_width = 200;
+	bar_height = 20;
+	x = 10;
+	y = 10;
+	for (int dy = 0; dy < bar_height; dy++)
+	{
+		for (int dx = 0; dx < bar_width; dx++)
+		{
+			if (x + dx < WIDTH && y + dy < HEIGHT)
+			{
+				int pixel_pos = (y + dy) * (cube->data.line_length / 4) + (x + dx);
+				if (pixel_pos >= 0 && pixel_pos < WIDTH * HEIGHT)
+					cube->data.addr[pixel_pos] = 0x800000;
+			}
+		}
+	}
+	int fill_width = (stamina_percent * bar_width) / 100;
+	for (int dy = 2; dy < bar_height - 2; dy++)
+	{
+		for (int dx = 2; dx < fill_width - 2; dx++)
+		{
+			if (x + dx < WIDTH && y + dy < HEIGHT)
+			{
+				int pixel_pos = (y + dy) * (cube->data.line_length / 4) + (x + dx);
+				if (pixel_pos >= 0 && pixel_pos < WIDTH * HEIGHT)
+				{
+					if (stamina_percent > 30)
+						cube->data.addr[pixel_pos] = 0x00FF00; // Green
+					else if (stamina_percent > 10)
+						cube->data.addr[pixel_pos] = 0xFFFF00; // Yellow
+					else
+						cube->data.addr[pixel_pos] = 0xFF0000; // Red
+				}
+			}
+		}
+	}
+	for (int dy = 0; dy < bar_height; dy++)
+	{
+		for (int dx = 0; dx < bar_width; dx++)
+		{
+			if (dy == 0 || dy == bar_height - 1 || dx == 0 || dx == bar_width - 1)
+			{
+				if (x + dx < WIDTH && y + dy < HEIGHT)
+				{
+					int pixel_pos = (y + dy) * (cube->data.line_length / 4) + (x + dx);
+					if (pixel_pos >= 0 && pixel_pos < WIDTH * HEIGHT)
+						cube->data.addr[pixel_pos] = 0xFFFFFF; // White border
+				}
+			}
+		}
+	}
+	char *stamina_str = ft_itoa(stamina_percent);
+	if (stamina_str)
+	{
+		int text_x = x + bar_width + 10;
+		int text_y = y + 2;
+		i = 0;
+		while (stamina_str[i])
+		{
+			if (text_x + 6 < WIDTH && text_y + 12 < HEIGHT)
+			{
+				for (int dy = 0; dy < 12; dy++)
+				{
+					for (int dx = 0; dx < 6; dx++)
+					{
+						if (text_x + dx < WIDTH && text_y + dy < HEIGHT)
+						{
+							int pixel_pos = (text_y + dy) * (cube->data.line_length / 4) + (text_x + dx);
+							if (pixel_pos >= 0 && pixel_pos < WIDTH * HEIGHT)
+								cube->data.addr[pixel_pos] = 0xFFFFFF; // White text
+						}
+					}
+				}
+				text_x += 7;
+			}
+			i++;
+		}
+		free(stamina_str);
+	}
 }

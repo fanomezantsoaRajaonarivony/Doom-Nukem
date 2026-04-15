@@ -16,8 +16,24 @@ void	get_move_dir(t_cube *get, t_player *player, t_camera *cam,
 		double move_dir[2])
 {
 	double	move_step;
+	double	speed_mult;
 
-	move_step = player->move * 0.2;
+	// Complete block during exhaustion timer
+	if (player->exhaustion_timer > 0)
+	{
+		move_dir[0] = 0;
+		move_dir[1] = 0;
+		return;
+	}
+
+	if (get->move.run && player->stamina > 0.4 && player->exhaustion_timer == 0)
+		speed_mult = 2.0;
+	else if (player->exhausted && player->exhaustion_timer == 0)
+		speed_mult = 0.5;
+	else
+		speed_mult = 1.0;
+	
+	move_step = player->move * 0.2 * speed_mult;
 	move_dir[0] = 0;
 	move_dir[1] = 0;
 	if (get->move.forward)
@@ -58,8 +74,23 @@ void	get_side_move(t_cube *get, t_camera *cam, t_player *player,
 		double move[2])
 {
 	double	move_step;
+	double	speed_mult;
 
-	move_step = player->move * 0.2;
+	if (player->exhaustion_timer > 0)
+	{
+		move[0] = 0;
+		move[1] = 0;
+		return;
+	}
+
+	if (get->move.run && player->stamina > 0.4 && player->exhaustion_timer == 0)
+		speed_mult = 2.0;
+	else if (player->exhausted && player->exhaustion_timer == 0)
+		speed_mult = 0.5;
+	else
+		speed_mult = 1.0;
+
+	move_step = player->move * 0.2 * speed_mult;
 	move[0] = 0;
 	move[1] = 0;
 	if (get->move.right == 1)

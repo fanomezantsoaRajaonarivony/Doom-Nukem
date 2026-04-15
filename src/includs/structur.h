@@ -67,6 +67,12 @@ typedef struct s_player
 	double			move;
 	double			rotet;
 	double			pitch;
+	double			stamina;
+	int				exhausted;
+	int				exhaustion_timer;
+	int				is_jumping;
+	double			jump_velocity;
+	double			jump_height;
 }					t_player;
 
 typedef struct s_map
@@ -146,6 +152,8 @@ typedef struct move
 	int				look_up;
 	int				look_down;
 	int				mouse_mode;
+	int				run;
+	int				jump;
 }					t_move;
 
 typedef struct s_cube

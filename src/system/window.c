@@ -17,6 +17,9 @@ int	start_cube(t_cube *cube)
 	raycasting(cube);
 	mlx_put_image_to_window(cube->window.mlx_ptr, cube->window.mlx_win,
 		cube->data.img, 0, 0);
+	update_stamina(cube);
+	display_stamina(cube);
+	update_jump(cube);
 	move_x(cube, &cube->player, &cube->cam, &cube->ray);
 	move_y(cube, &cube->player, &cube->cam, &cube->ray);
 	rotate_camera(&cube->move, &cube->cam, &cube->player);
