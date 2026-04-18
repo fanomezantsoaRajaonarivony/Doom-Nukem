@@ -26,7 +26,7 @@ void	init_player(t_player *player)
 	player->exhaustion_timer = 0;
 	player->is_jumping = 0;
 	player->jump_velocity = 0.0;
-	player->jump_height = 0.0;
+	player->pos_z = 0.0;
 }
 
 void	init_map(t_map *map)

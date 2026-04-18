@@ -118,30 +118,30 @@ void	update_stamina(t_cube *cube)
 	}
 }
 
-void	update_jump(t_cube *cube)
+void    update_jump(t_cube *cube)
 {
-	double	gravity;
-	double	jump_force;
+    double  gravity;
+    double  jump_force;
 
-	gravity = 0.008;
-	jump_force = 0.18;
+    gravity = 1.8;
+    jump_force = 32.0;
 
-	if (cube->move.jump && !cube->player.is_jumping && cube->player.jump_height <= 0)
-	{
-		cube->player.is_jumping = 1;
-		cube->player.jump_velocity = jump_force;
-		cube->move.jump = 0;
-	}
-
-	if (cube->player.is_jumping)
-	{
-		cube->player.jump_height += cube->player.jump_velocity;
-		cube->player.jump_velocity -= gravity;
-		if (cube->player.jump_height <= 0)
-		{
-			cube->player.jump_height = 0;
-			cube->player.jump_velocity = 0;
-			cube->player.is_jumping = 0;
-		}
-	}
+    if (cube->move.jump && !cube->player.is_jumping
+        && cube->player.pos_z <= 0)
+    {
+        cube->player.is_jumping = 1;
+        cube->player.jump_velocity = jump_force;
+        cube->move.jump = 0;
+    }
+    if (cube->player.is_jumping)
+    {
+        cube->player.pos_z += cube->player.jump_velocity;
+        cube->player.jump_velocity -= gravity;
+        if (cube->player.pos_z <= 0)
+        {
+            cube->player.pos_z = 0;
+            cube->player.jump_velocity = 0;
+            cube->player.is_jumping = 0;
+        }
+    }
 }

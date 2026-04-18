@@ -72,7 +72,7 @@ typedef struct s_player
 	int				exhaustion_timer;
 	int				is_jumping;
 	double			jump_velocity;
-	double			jump_height;
+	double			pos_z;
 }					t_player;
 
 typedef struct s_map

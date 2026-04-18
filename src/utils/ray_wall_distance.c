@@ -34,22 +34,20 @@ void    compute_wall_dimensions(t_ray *raycast, t_player *player)
 {
     int     half_height;
     int     pitch_pixels;
-    int     jump_pitch_pixels;
+    int     jump_offset;
 
     half_height = HEIGHT / 2;
-    // CORRECTION : cast en int pour éviter l'étirement
     raycast->lineheight = (int)(HEIGHT / raycast->perpwalldist);
+
     pitch_pixels = (int)(player->pitch * HEIGHT / 2);
-    jump_pitch_pixels = (int)(player->jump_height * 5.0 * HEIGHT / 2);
+    jump_offset = (int)(player->pos_z / raycast->perpwalldist);
 
     raycast->original_drawstart = half_height - (raycast->lineheight >> 1);
-    raycast->drawstart = raycast->original_drawstart - pitch_pixels - jump_pitch_pixels;
-    raycast->drawend   = half_height + (raycast->lineheight >> 1) - pitch_pixels - jump_pitch_pixels;
+    raycast->drawstart = raycast->original_drawstart - pitch_pixels + jump_offset;
+    raycast->drawend   = half_height + (raycast->lineheight >> 1) - pitch_pixels + jump_offset;
 
     if (raycast->drawstart < 0)
         raycast->drawstart = 0;
     if (raycast->drawend >= HEIGHT)
         raycast->drawend = HEIGHT - 1;
-    if (raycast->drawend < 0)
-        raycast->drawend = 0;
 }
