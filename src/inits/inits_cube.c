@@ -18,8 +18,8 @@ void	init_player(t_player *player)
 	player->dy = 0;
 	player->pos_x = 0;
 	player->pos_y = 0;
-	player->move = 0.1;
-	player->rotet = 0.01;
+	player->move = 0.25;
+	player->rotet = 0.05;
 	player->pitch = 0.0;
 	player->stamina = 100.0;
 	player->exhausted = 0;

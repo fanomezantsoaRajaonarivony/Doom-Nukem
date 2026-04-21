@@ -11,20 +11,44 @@
 /* ************************************************************************** */
 
 #include "../includs/cub.h"
+#include <sys/time.h>
 
-int	start_cube(t_cube *cube)
+long    get_time_ms(void)
 {
-	raycasting(cube);
-	mlx_put_image_to_window(cube->window.mlx_ptr, cube->window.mlx_win,
-		cube->data.img, 0, 0);
-	update_stamina(cube);
-	display_stamina(cube);
-	update_jump(cube);
-	move_x(cube, &cube->player, &cube->cam, &cube->ray);
-	move_y(cube, &cube->player, &cube->cam, &cube->ray);
-	rotate_camera(&cube->move, &cube->cam, &cube->player);
-	look_up_down(cube);
-	return (0);
+    struct timeval  tv;
+
+    gettimeofday(&tv, NULL);
+    return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
+}
+
+
+int     start_cube(t_cube *cube)
+{
+    static long last_time = 0;
+    long        current_time;
+    long        delta;
+    struct timeval tv;
+
+    gettimeofday(&tv, NULL);
+    current_time = tv.tv_sec * 1000 + tv.tv_usec / 1000;
+    if (last_time == 0)
+        last_time = current_time;
+    delta = current_time - last_time;
+    if (delta < 16)
+        return (0);
+    last_time = current_time;
+
+    raycasting(cube);
+    mlx_put_image_to_window(cube->window.mlx_ptr, cube->window.mlx_win,
+        cube->data.img, 0, 0);
+    update_stamina(cube);
+    display_stamina(cube);
+    update_jump(cube);
+    move_x(cube, &cube->player, &cube->cam, &cube->ray);
+    move_y(cube, &cube->player, &cube->cam, &cube->ray);
+    rotate_camera(&cube->move, &cube->cam, &cube->player);
+    look_up_down(cube);
+    return (0);
 }
 
 void	gener_cube(t_cube *cube)
