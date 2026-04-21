@@ -81,7 +81,9 @@ void	update_stamina(t_cube *cube)
 {
 	int	is_running;
 
-	is_running = cube->move.run && (cube->move.forward || cube->move.backward
+	is_running = cube->move.run
+		&& cube->player.crouch_state == 0
+		&& (cube->move.forward || cube->move.backward
 			|| cube->move.left || cube->move.right)
 		&& cube->player.stamina > 0.4 && cube->player.exhaustion_timer == 0;
 	if (is_running)
@@ -91,30 +93,24 @@ void	update_stamina(t_cube *cube)
 		{
 			cube->player.stamina = 0;
 			cube->player.exhausted = 1;
-			cube->player.exhaustion_timer = 180; // 3 seconds at 60 FPS
+			cube->player.exhaustion_timer = 180;
 		}
 	}
-	else if (!is_running) // Regenerate when not running (even if exhausted)
+	else if (!is_running)
 	{
 		cube->player.stamina += 0.05;
 		if (cube->player.stamina > 100.0)
 			cube->player.stamina = 100.0;
 	}
 	
-	// Handle exhaustion timer - only decrease timer, don't clear exhausted state yet
 	if (cube->player.exhaustion_timer > 0)
 	{
 		cube->player.exhaustion_timer--;
-		// Only clear exhausted state when timer reaches 0 AND stamina has regenerated to 30
+	
 		if (cube->player.exhaustion_timer == 0 && cube->player.stamina >= 30.0)
-		{
 			cube->player.exhausted = 0;
-		}
 		else if (cube->player.exhaustion_timer == 0 && cube->player.stamina < 30.0)
-		{
-			// Keep exhausted state but allow stamina to regenerate to 30
 			cube->player.exhausted = 1;
-		}
 	}
 }
 
@@ -143,5 +139,32 @@ void    update_jump(t_cube *cube)
             cube->player.jump_velocity = 0;
             cube->player.is_jumping = 0;
         }
+    }
+}
+
+void    update_crouch(t_cube *cube)
+{
+    double  target;
+    double  step;
+
+    step = 8.0;
+    if (cube->player.crouch_state == 0)
+        target = 0.0;
+    else if (cube->player.crouch_state == 1)
+        target = -80.0;
+    else
+        target = -160.0;
+    
+    if (cube->player.crouch_offset < target)
+    {
+        cube->player.crouch_offset += step;
+        if (cube->player.crouch_offset > target)
+            cube->player.crouch_offset = target;
+    }
+    else if (cube->player.crouch_offset > target)
+    {
+        cube->player.crouch_offset -= step;
+        if (cube->player.crouch_offset < target)
+            cube->player.crouch_offset = target;
     }
 }

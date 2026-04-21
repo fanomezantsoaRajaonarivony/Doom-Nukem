@@ -26,12 +26,19 @@ void	get_move_dir(t_cube *get, t_player *player, t_camera *cam,
 		return;
 	}
 
-	if (get->move.run && player->stamina > 0.4 && player->exhaustion_timer == 0)
+	if (player->crouch_state > 0)
+		speed_mult = 1.0;
+	else if (get->move.run && player->stamina > 0.4 && player->exhaustion_timer == 0)
 		speed_mult = 2.0;
 	else if (player->exhausted && player->exhaustion_timer == 0)
 		speed_mult = 0.5;
 	else
 		speed_mult = 1.0;
+	
+	if (player->crouch_state == 1)
+		speed_mult *= 0.6;
+	else if (player->crouch_state == 2)
+		speed_mult *= 0.25;
 	
 	move_step = player->move * 0.2 * speed_mult;
 	move_dir[0] = 0;
@@ -83,12 +90,19 @@ void	get_side_move(t_cube *get, t_camera *cam, t_player *player,
 		return;
 	}
 
-	if (get->move.run && player->stamina > 0.4 && player->exhaustion_timer == 0)
+	if (player->crouch_state > 0)
+		speed_mult = 1.0;
+	else if (get->move.run && player->stamina > 0.4 && player->exhaustion_timer == 0)
 		speed_mult = 2.0;
 	else if (player->exhausted && player->exhaustion_timer == 0)
 		speed_mult = 0.5;
 	else
 		speed_mult = 1.0;
+
+	if (player->crouch_state == 1)
+		speed_mult *= 0.6;
+	else if (player->crouch_state == 2)
+		speed_mult *= 0.25;
 
 	move_step = player->move * 0.2 * speed_mult;
 	move[0] = 0;

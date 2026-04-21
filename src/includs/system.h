@@ -43,5 +43,6 @@ void	look_up_down(t_cube *cube);
 void	update_stamina(t_cube *cube);
 void	display_stamina(t_cube *cube);
 void	update_jump(t_cube *cube);
+void    update_crouch(t_cube *cube);
 
 #endif

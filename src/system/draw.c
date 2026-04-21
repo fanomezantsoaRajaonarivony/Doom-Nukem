@@ -47,6 +47,7 @@ void    prepare_texture_render(t_cube *get, int x)
     t_texture   *img;
     int         index[2];
     int         true_wall_top;
+    int         crouch_off;
 
     ray = &get->ray;
     img = &get->img;
@@ -57,10 +58,12 @@ void    prepare_texture_render(t_cube *get, int x)
             && ray->raydiry < 0))
         img->texx = get->texture[img->texdir].width - img->texx - 1;
 
+    crouch_off = (int)(get->player.crouch_offset / ray->perpwalldist);
     // Vrai haut géométrique du mur sur l'écran (AVEC pitch et jump, sans clamp)
     true_wall_top = HEIGHT / 2 - ray->lineheight / 2
         - (int)(get->player.pitch * HEIGHT / 2)
-        + (int)(get->player.pos_z / ray->perpwalldist);
+        + (int)(get->player.pos_z / ray->perpwalldist)
+        + crouch_off;
 
     // Pixels sautés entre le vrai haut et drawstart (à cause du clamp)
     img->texpos = 0;

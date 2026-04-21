@@ -27,6 +27,8 @@ void	init_player(t_player *player)
 	player->is_jumping = 0;
 	player->jump_velocity = 0.0;
 	player->pos_z = 0.0;
+	player->crouch_state = 0;
+	player->crouch_offset = 0.0;
 }
 
 void	init_map(t_map *map)
@@ -58,6 +60,7 @@ void	init_move(t_move *move)
 	move->mouse_mode = 1;
 	move->run = 0;
 	move->jump = 0;
+	move->crouch = 0;
 }
 
 void	init_cube(t_cube *data)

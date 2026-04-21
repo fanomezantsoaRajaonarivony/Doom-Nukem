@@ -73,6 +73,8 @@ typedef struct s_player
 	int				is_jumping;
 	double			jump_velocity;
 	double			pos_z;
+	int				crouch_state;
+	double			crouch_offset;
 }					t_player;
 
 typedef struct s_map
@@ -154,6 +156,7 @@ typedef struct move
 	int				mouse_mode;
 	int				run;
 	int				jump;
+	int				crouch;
 }					t_move;
 
 typedef struct s_cube

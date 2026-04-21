@@ -44,6 +44,7 @@ int     start_cube(t_cube *cube)
     update_stamina(cube);
     display_stamina(cube);
     update_jump(cube);
+    update_crouch(cube);
     move_x(cube, &cube->player, &cube->cam, &cube->ray);
     move_y(cube, &cube->player, &cube->cam, &cube->ray);
     rotate_camera(&cube->move, &cube->cam, &cube->player);

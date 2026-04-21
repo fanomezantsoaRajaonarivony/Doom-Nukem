@@ -83,6 +83,13 @@ int key_press(int keycode, t_cube *get)
         get->move.run = 1;
     else if (keycode == 32)
         get->move.jump = 1;
+    else if (keycode == 99 && !get->move.crouch)
+    {
+        get->move.crouch = 1;
+        get->player.crouch_state = (get->player.crouch_state + 1) % 3;
+        if (get->player.is_jumping)
+            get->player.crouch_state = 0;
+    }
     else if (keycode == 65481)
     {
         get->move.mouse_mode ^= 1;  // F12 toggle mouse mode
@@ -118,5 +125,7 @@ int key_release(int keycode, t_cube *get)
         get->move.run = 0;
     else if (keycode == 32)
         get->move.jump = 0;
+    else if (keycode == 99)
+        get->move.crouch = 0;
     return (1);
 }
